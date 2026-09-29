@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2e9e5b">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Die drei ??? – Folgen-Tracker</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f6f4ef;--card:#fff;--tx:#1d1d1b;--mu:#6b6a65;--ac:#2e9e5b;--acx:#fff;--bd:#e3e0d8;--star:#f0a500}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15171a;--card:#202327;--tx:#eceef1;--mu:#98a0a8;--ac:#3fbf74;--acx:#08170e;--bd:#30353b;--star:#f5b82e}}
+:root[data-theme="dark"]{--bg:#15171a;--card:#202327;--tx:#eceef1;--mu:#98a0a8;--ac:#3fbf74;--acx:#08170e;--bd:#30353b;--star:#f5b82e}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.35 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:640px;margin:0 auto;padding:16px}
+h1{font-size:1.35rem;margin:0 0 10px}
+.bar{height:10px;background:var(--bd);border-radius:9px;overflow:hidden}
+.bar div{height:100%;background:var(--ac);width:0;transition:width .3s}
+.sub{color:var(--mu);font-size:.85rem;margin:6px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(34px,1fr));gap:4px;margin-bottom:14px}
+.t{font-size:.72rem;padding:6px 0;text-align:center;border:1px solid var(--bd);border-radius:7px;background:var(--card);color:var(--mu);cursor:pointer;user-select:none}
+.t.h{background:var(--ac);border-color:var(--ac);color:var(--acx);font-weight:700}
+input,button{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px 10px}
+input{width:100%;margin-bottom:8px}
+.seg{display:flex;gap:6px;margin-bottom:10px}
+.seg button{flex:1;padding:8px 4px}
+.seg button.on{background:var(--ac);border-color:var(--ac);color:var(--acx);font-weight:600}
+.r{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px 10px;margin-bottom:6px}
+.r.h{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 12%,var(--card))}
+.c{width:28px;height:28px;flex:none;border-radius:50%;border:2px solid var(--bd);display:grid;place-items:center;cursor:pointer;font-weight:700;color:transparent}
+.r.h .c{background:var(--ac);border-color:var(--ac);color:var(--acx)}
+.n{flex:none;width:2.4em;color:var(--mu);font-size:.85rem}
+.ti{flex:1;min-width:0;overflow-wrap:anywhere}
+.s{flex:none;white-space:nowrap}
+.s span{cursor:pointer;color:var(--bd);font-size:1.15rem;padding:0 1px;user-select:none}
+.s span.on{color:var(--star)}
+.foot{display:flex;gap:8px;justify-content:center;margin:14px 0 4px}
+.note{color:var(--mu);font-size:.78rem;text-align:center}
+</style>
+</head>
+<body>
+<main>
+<h1>🔍 Die drei ??? – Folgen</h1>
+<div class="bar"><div id="pb"></div></div>
+<div class="sub" id="stat"></div>
+<div class="grid" id="grid"></div>
+<input id="q" placeholder="Folge oder Titel suchen…">
+<div class="seg" id="seg">
+  <button data-f="all" class="on">Alle</button><button data-f="un">Ungehört</button><button data-f="h">Gehört</button>
+</div>
+<div id="list"></div>
+<div class="foot"><button id="exp">Export</button><button id="imp">Import</button></div>
+<div class="note">Reguläre Folgen 1–241 (ohne Specials). Stand der Liste: 23.09.2026.</div>
+</main>
+<script>
+(function(){
+var RAW="~der Super-Papagei|~der Phantomsee|~der Karpatenhund|~die schwarze Katze|~der Fluch des Rubins|~der sprechende Totenkopf|~der unheimliche Drache|~der grüne Geist|~die rätselhaften Bilder|~die flüsternde Mumie|~das Gespensterschloß|~der seltsame Wecker|~der lachende Schatten|~das Bergmonster|~der rasende Löwe|~der Zauberspiegel|~die gefährliche Erbschaft|~die Geisterinsel|~der Teufelsberg|~die flammende Spur|~der tanzende Teufel|~der verschwundene Schatz|~das Aztekenschwert|~die silberne Spinne|~die singende Schlange|~die Silbermine|~der magische Kreis|~der Doppelgänger||~das Riff der Haie|~das Narbengesicht|~der Ameisenmensch|~die bedrohte Ranch|~der rote Pirat|~der Höhlenmensch|~der Super-Wal|~der heimliche Hehler|~der unsichtbare Gegner|~die Perlenvögel|~der Automarder|~das Volk der Winde|~der weinende Sarg|~der höllische Werwolf|~der gestohlene Preis|~das Gold der Wikinger|~der schrullige Millionär|~der giftige Gockel|~die gefährlichen Fässer|~die Comic-Diebe|~der verschwundene Filmstar|~der riskante Ritt|~die Musikpiraten|~die Automafia|Gefahr im Verzug|Gekaufte Spieler|Angriff der Computer-Viren|Tatort Zirkus|~der verrückte Maler|Giftiges Wasser|Dopingmixer|~die Rache des Tigers|Spuk im Hotel|Fußball-Gangster|Geisterstadt|Diamantenschmuggel|~die Schattenmänner|~das Geheimnis der Särge|~der Schatz im Bergsee|Späte Rache|Schüsse aus dem Dunkel|~die verschwundene Seglerin|Dreckiger Deal|Poltergeist|~das brennende Schwert|Die Spur des Raben|Stimmen aus dem Nichts|Pistenteufel|Das leere Grab|Im Bann des Voodoo|Geheimakte UFO|Verdeckte Fouls|Die Karten des Bösen|Meuterei auf hoher See|Die Musik des Teufels|Feuerturm|Nacht in Angst|Wolfsgesicht|Vampir im Internet|Tödliche Spur|Der Feuerteufel|Labyrinth der Götter|Todesflug|~das Geisterschiff|Das schwarze Monster|Botschaft von Geisterhand|~der rote Rächer|Insektenstachel|Tal des Schreckens|Rufmord|Toteninsel|~das Hexenhandy|Doppelte Täuschung|Das Erbe des Meisterdiebs|Gift per Email|~der Nebelberg|Der Mann ohne Kopf|~der Schatz der Mönche|Die sieben Tore|Gefährliches Quiz|Panik im Park|Die Höhle des Grauens|Schlucht der Dämonen|Das Auge des Drachen|Die Villa der Toten|Auf tödlichem Kurs|Codename: Cobra|Der finstere Rivale|Das düstere Vermächtnis|Der geheime Schlüssel|Der schwarze Skorpion|Spur ins Nichts|~der Geisterzug|Fußballfieber|Geister-Canyon|Feuermond|Schrecken aus dem Moor|Schwarze Madonna|Schatten über Hollywood|SMS aus dem Grab|Der Fluch des Drachen|Haus des Schreckens|Spuk im Netz|Fels der Dämonen|Der tote Mönch|Fluch des Piraten|~das versunkene Dorf|Pfad der Angst|Die geheime Treppe|Das Geheimnis der Diva|Stadt der Vampire|~die Fußball-Falle|Tödliches Eis|~die Poker-Hölle|Zwillinge der Finsternis|~die Rache der Samurai|Der Biss der Bestie|Grusel auf Campbell Castle|~die feurige Flut|Der namenlose Gegner|Geisterbucht|Schwarze Sonne|Skateboardfieber|~das Fußball-Phantom|Botschaft aus der Unterwelt|~der Meister des Todes|Im Netz des Drachen|Im Zeichen der Schlangen|~der Feuergeist|Nacht der Tiger|Geheimnisvolle Botschaften|Die blutenden Bilder|~der schreiende Nebel|~der verschollene Pilot|Fußball-Teufel|Im Schatten des Giganten|~die brennende Stadt|~das blaue Biest|GPS-Gangster|Die Spur des Spielers|Straße des Grauens|~das Phantom aus dem Meer|~der Eisenmann|Dämon der Rache|~das Tuch der Toten|Schattenwelt|~der gestohlene Sieg|Der Geist des Goldgräbers|Der gefiederte Schrecken|Die Rache des Untoten|~die flüsternden Puppen|Das Kabinett des Zauberers|Im Haus des Henkers|~der letzte Song|~der Hexengarten|~der Mann ohne Augen|Insel des Vergessens|~das silberne Amulett|Signale aus dem Jenseits|~der unsichtbare Passagier|~die Kammer der Rätsel|Verbrechen im Nichts|Im Bann des Drachen|Schrecken aus der Tiefe|~die Zeitreisende|Im Reich der Ungeheuer|Geheimnis des Bauchredners|Im Auge des Sturms|Die Legende der Gaukler|~der grüne Kobold|Feuriges Auge|Höhenangst|Das weiße Grab|Tauchgang ins Ungewisse|Der dunkle Wächter|Das rätselhafte Erbe|~der Mottenmann|Die falschen Detektive|Kelch des Schicksals|Kreaturen der Nacht|Die schweigende Grotte|~der Jadekönig|~der weiße Leopard|Der Fluch der Medusa|~der Geisterbunker|~die verlorene Zeit|Die Schwingen des Unheils|~der Kristallschädel|Im Netz der Lügen|~die Teufelsklippe|Im Wald der Gefahren|Manuskript des Satans|~die Gesetzlosen|~der Knochenmann|Die Yacht des Verrats|~der Puppenmacher|Die Spur der Toten|Melodie der Rache|Der Ruf der Krähen|Drehbuch der Täuschung|Der Tag der Toten|~der Dreiäugige Schakal|Die Stadt aus Gold|Die Nacht der Gewitter|~der lebende Tresor|~das Fantasmofon|Im Bann des Barrakudas|~der rote Büffel|Falsche Schuld|Das Geheimnis der sieben Palmen|~die schwarze Rose|Meister des Lichts";
+var EP=[];RAW.split("|").forEach(function(t,i){if(t)EP.push({n:i+1,t:t.charAt(0)==="~"?"…und "+t.slice(1):t})});
+var KEY="ddf-tracker-v1",S={},flt="all";
+function $(i){return document.getElementById(i)}
+function load(){try{S=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){S={}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function st(n){return S[n]||(S[n]={h:0,r:0})}
+function toggle(n){var s=st(n);s.h=s.h?0:1;save();render()}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function render(){
+  var hc=0;EP.forEach(function(e){if(S[e.n]&&S[e.n].h)hc++});
+  $("pb").style.width=(hc/EP.length*100)+"%";
+  $("stat").textContent=hc+" von "+EP.length+" gehört · "+(EP.length-hc)+" offen";
+  $("grid").innerHTML=EP.map(function(e){return '<div class="t'+(S[e.n]&&S[e.n].h?" h":"")+'" data-n="'+e.n+'">'+e.n+'</div>'}).join("");
+  var q=$("q").value.toLowerCase();
+  $("list").innerHTML=EP.filter(function(e){
+    var h=S[e.n]&&S[e.n].h;
+    return(flt==="all"||(flt==="h"&&h)||(flt==="un"&&!h))&&(!q||(e.n+" "+e.t).toLowerCase().indexOf(q)>-1)
+  }).map(function(e){
+    var s=S[e.n]||{h:0,r:0},x="";
+    for(var i=1;i<=5;i++)x+='<span data-n="'+e.n+'" data-v="'+i+'" class="'+(i<=s.r?"on":"")+'">★</span>';
+    return '<div class="r'+(s.h?" h":"")+'"><div class="c" data-n="'+e.n+'">✓</div><div class="n">'+e.n+'</div><div class="ti">'+esc(e.t)+'</div><div class="s">'+x+'</div></div>'
+  }).join("")||'<div class="sub">Nichts gefunden.</div>';
+}
+$("grid").addEventListener("click",function(e){var n=e.target.dataset.n;if(n)toggle(+n)});
+$("list").addEventListener("click",function(e){
+  var d=e.target.dataset;if(!d.n)return;
+  if(d.v){var s=st(+d.n);s.r=s.r===+d.v?0:+d.v;if(s.r)s.h=1;save();render()}
+  else toggle(+d.n);
+});
+$("seg").addEventListener("click",function(e){if(!e.target.dataset.f)return;flt=e.target.dataset.f;
+  Array.prototype.forEach.call($("seg").children,function(b){b.className=b.dataset.f===flt?"on":""});render()});
+$("q").addEventListener("input",render);
+$("exp").onclick=function(){var s=JSON.stringify(S);try{navigator.clipboard.writeText(s);alert("Daten in die Zwischenablage kopiert.")}catch(e){prompt("Daten kopieren:",s)}};
+$("imp").onclick=function(){var s=prompt("Exportierte Daten einfügen:");if(!s)return;try{var o=JSON.parse(s);if(o&&typeof o==="object"){S=o;save();render()}}catch(e){alert("Ungültige Daten.")}};
+load();render();
+})();
+</script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
+</body>
+</html>
